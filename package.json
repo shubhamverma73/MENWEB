@@ -1,0 +1,20 @@
+{
+  "name": "menweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/controllers/user.js",
+    "dev": "nodemon src/controllers/user.js -e js,hbs"
+  },
+  "keywords": [],
+  "author": "Shubham",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "hbs": "^4.1.2",
+    "mongoose": "^5.12.4",
+    "validator": "^13.5.2"
+  }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/style.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+        <title>Registration</title>
+    </head>
+
+    <body>
+        {{>navbar}}
+        <h1>{{ msg }}</h1>
+        <div class="testbox-register">
+        <h1>Registration</h1>
+
+        <form action="/register" method="POST">
+        <hr>
+
+        <label id="icon" for="name"><i class="icon-user"></i></label>
+        <input type="text" name="name" id="name" placeholder="Name" required/>
+
+        <label id="icon" for="email"><i class="icon-envelope "></i></label>
+        <input type="text" name="email" id="email" placeholder="Email" required/>
+
+        <label id="icon" for="phone"><i class="icon-phone"></i></label>
+        <input type="text" name="phone" id="phone" placeholder="Phone" required/>
+
+        <label id="icon" for="password"><i class="icon-shield"></i></label>
+        <input type="password" name="password" id="password" placeholder="Password" required/>
+
+        <label id="icon" for="confirmpassword"><i class="icon-shield"></i></label>
+        <input type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm Password" required/>
+
+        <div class="gender">
+            <input type="radio" value="male" id="male" name="gender" checked/>
+            <label for="male" class="radio">Male</label>
+            <input type="radio" value="female" id="female" name="gender" />
+            <label for="female" class="radio">Female</label>
+        </div> 
+        <button type="submit" class="button">Register</button>
+        </form>
+        </div>
+    </body>
+</html>
