@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     var queryString = url.parse(req.url, true);
     res.render('index', {
         post: {
-            page: queryString.href
+            index: true
         }
     });
 });
@@ -17,7 +17,7 @@ router.get('/login', (req, res) => {
     var queryString = url.parse(req.url, true);
     res.render('login', {
         post: {
-            page: queryString.href
+            login: true
         }
     });
 });
@@ -26,7 +26,7 @@ router.get('/register', (req, res) => {
     var queryString = url.parse(req.url, true);
     res.render('register', {
         post: {
-            page: queryString.href
+            register: true
         }
     });
 });
@@ -71,11 +71,11 @@ router.post('/login', async (req, res) => {
         if(result.password === password) {
             res.status(201).render('index', { data: result });
         } else {
-            res.status(500).render('login', { msg: "Invalid credentials, please try again." });
+            res.status(500).render('login', { msg: "Invalid credentials, please try again.", post: { login: true } });
         }
     }
     catch(err) {
-        res.status(500).render('login', { msg: "Records not found, try again." });
+        res.status(500).render('login', { msg: "Records not found, try again.", post: { login: true } });
     }
 });
 

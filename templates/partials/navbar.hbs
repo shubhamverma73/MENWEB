@@ -1,6 +1,5 @@
 <div class="topnav">
-    {{!-- <a {{#if post.page "home"}} class="active" {{else}} class="" {{/if}} href="/">Home</a> --}}
-    <a href="/">Home</a>
-    <a href="login">Login</a>
-    <a href="register">Register</a>
+    <a {{#if post.index }} class="active" {{else}} class="" {{/if}} href="/">Home</a>
+    <a {{#if post.login }} class="active" {{else}} class="" {{/if}} href="/login">Login</a>
+    <a {{#if post.register }} class="active" {{else}} class="" {{/if}} href="/register">Register</a>
 </div>

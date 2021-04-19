@@ -10,7 +10,11 @@
 
     <body>
         {{>navbar}}
-        <h1>{{ msg }}</h1>
+        {{#if msg }}
+            <div class="alert alert-danger" role="alert">
+                {{ msg }}
+            </div>
+        {{/if}}
         <div class="testbox-login">
         <h1>Login</h1>
 
