@@ -1,5 +1,6 @@
 const express   = require('express');
 var url         = require('url');
+const bcrypt    = require('bcrypt');
 const router    = new express.Router();
 const Users     = require('./../models/users');
 const commonhelper = require('./../helper/commonhelper');
@@ -49,11 +50,13 @@ router.post('/register', async (req, res) => {
                 password:   req.body.password,
                 gender:     req.body.gender,
             });
-            const result = await register.save();
-            //commonhelper.handleSuccess(req, res, 'User registered successfully.');
+
+            const token     = await register.generateAuthToken(); // Calling Middlewear function
+            const result    = await register.save();
+
             res.status(201).render('index');
         } else {
-            commonhelper.handleError(err, res, 'Confirm password not matched with password.');
+            res.status(400).render('register', { msg: "Confirm password not matched with password.", post: { register: true } });
         }
     }
     catch(err) {
@@ -67,8 +70,13 @@ router.post('/login', async (req, res) => {
         const email             = req.body.email;
         const password          = req.body.password;
 
-        const result = await Users.findOne({email: email}); //If you want to get by Phone or Email, use find instead of findById and replace _id with phone or email
-        if(result.password === password) {
+        const result    = await Users.findOne({email: email}); //If you want to get by Phone or Email, use find instead of findById and replace _id with phone or email
+        
+        const isMatch   = await bcrypt.compare(password, result.password); //Confirm hash password with user input password
+
+        const token     = await result.generateAuthToken(); // Calling Middlewear function
+        
+        if(isMatch) {
             res.status(201).render('index', { data: result });
         } else {
             res.status(500).render('login', { msg: "Invalid credentials, please try again.", post: { login: true } });
