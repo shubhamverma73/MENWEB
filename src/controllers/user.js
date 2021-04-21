@@ -3,6 +3,7 @@ require('dotenv').config();
 const express   = require('express');
 const path      = require('path');
 const hbs       = require("hbs");
+const cookieParser = require('cookie-parser');
 const app       = express();
 const port      = process.env.PORT || 3000;
 require('./../db/conn');
@@ -17,8 +18,9 @@ app.set('views', template_path); //Telling hbs to call our view folder for defau
 hbs.registerPartials(partials_path);
 //console.log(template_path);
 
-// =================================== Methods use by our system ===========================================
+// =================================== Methods use by our system (Middleware) ===========================================
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
 app.use(usrRouter);
 

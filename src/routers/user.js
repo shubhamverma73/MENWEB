@@ -4,6 +4,7 @@ const bcrypt    = require('bcrypt');
 const router    = new express.Router();
 const Users     = require('./../models/users');
 const commonhelper = require('./../helper/commonhelper');
+const auth = require("../middleware/auth");
 
 router.get('/', (req, res) => {
     var queryString = url.parse(req.url, true);
@@ -32,8 +33,38 @@ router.get('/register', (req, res) => {
     });
 });
 
-router.get('/error', (req, res) => {
-    res.render('error');
+router.get('/secure', auth, (req, res) => {
+    res.render('secure', {
+        post: {
+            secure: true
+        }
+    });
+});
+
+router.get('/logout', auth, async (req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter((currentElement) => {
+            return currentElement.token !== req.token //Return all tokens except current token
+        });
+        res.clearCookie("jwt");
+        await req.user.save(); // save all tokens again into same document 
+        res.status(200).render('index', { msg: "Logout successfully.", post: { index: true } });
+    }
+    catch(err) {
+        commonhelper.handleError(err, res, '');
+    }
+});
+
+router.get('/logout_all', auth, async (req, res) => {
+    try {
+        req.user.tokens = [];
+        res.clearCookie("jwt");
+        await req.user.save(); // save all tokens again into same document 
+        res.status(200).render('index', { msg: "Logout successfully.", post: { index: true } });
+    }
+    catch(err) {
+        commonhelper.handleError(err, res, '');
+    }
 });
 
 // ================================ Create a new user (Using Async Await) ===============================
@@ -51,7 +82,13 @@ router.post('/register', async (req, res) => {
                 gender:     req.body.gender,
             });
 
-            const token     = await register.generateAuthToken(); // Calling Middlewear function
+            const token     = await register.generateAuthToken(); // Calling Middleware function
+
+            res.cookie("jwt", token, {
+                expires: new Date(Date.now() + 60000), //60 sec.
+                httpOnly: true
+            });
+
             const result    = await register.save();
 
             res.status(201).render('index');
@@ -77,7 +114,14 @@ router.post('/login', async (req, res) => {
         const token     = await result.generateAuthToken(); // Calling Middlewear function
         
         if(isMatch) {
-            res.status(201).render('index', { data: result });
+
+            res.cookie("jwt", token, {
+                expires: new Date(Date.now() + 60000), //60 sec.
+                httpOnly: true
+            });
+
+            //res.status(201).render('index', { data: result, post: { index: true } });
+            res.status(201).redirect('/');
         } else {
             res.status(500).render('login', { msg: "Invalid credentials, please try again.", post: { login: true } });
         }
