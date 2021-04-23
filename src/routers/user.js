@@ -104,7 +104,7 @@ router.post('/register', async (req, res) => {
 // ================================ Get data of specific user ===============================
 router.post('/login', async (req, res) => {
     try {
-        const email             = req.body.email;
+        const email             = req.body.email; //Perhaps req.query.email will be for GET method
         const password          = req.body.password;
 
         const result    = await Users.findOne({email: email}); //If you want to get by Phone or Email, use find instead of findById and replace _id with phone or email
